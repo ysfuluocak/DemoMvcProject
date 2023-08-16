@@ -13,20 +13,11 @@ namespace DemoMvcProject.DataAccess.Configuration
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.HasKey("Id");
+            builder.HasKey(p=>p.Id);
             builder.HasOne(p => p.Category)
                 .WithMany(p => p.Products)
                 .HasForeignKey(p => p.CategoryId);
-            builder.HasData(new Product()
-            {
-                ProductName = "Telefon",
-                Description = "Akıllı Telefon",
-                Price = 30000,
-                Stock = 10,
-                CategoryId = 1,
-                CreatedDate = DateTime.Now,
-                Status = false
-            });
+           
         }
     }
 }

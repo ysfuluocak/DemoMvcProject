@@ -1,15 +1,15 @@
-using DemoMvcProject.DataAccess.Concrete;
-using Microsoft.EntityFrameworkCore;
+using DemoMvcProject.Business;
+using DemoMvcProject.Business.Abstract;
+using DemoMvcProject.Business.Concrete;
+using DemoMvcProject.DataAccess.Abstract;
+using DemoMvcProject.DataAccess.Concrete.EntityFramework;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-//builder.Services.AddScopedBusiness(builder.Configuration.GetConnectionString("DefaultConnection"));
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlServer("Server=ULUOCAK\\SQLEXPRESS;Database=DemoMvc;Trusted_Connection=True;");
-});
+builder.Services.AddScopedBll();
+
 
 var app = builder.Build();
 

@@ -10,10 +10,8 @@ using System.Threading.Tasks;
 
 namespace DemoMvcProject.DataAccess.Concrete.EntityFramework
 {
-    public class EfProductDal : EfEntityRepositoryBase<Product>, IProductDal
+    public class EfProductDal : EfEntityRepositoryBase<Product, AppDbContext>, IProductDal
     {
-        public EfProductDal(DbContext context) : base(context)
-        {
-        }
+       
     }
 }

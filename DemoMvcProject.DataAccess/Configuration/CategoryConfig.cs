@@ -14,12 +14,7 @@ namespace DemoMvcProject.DataAccess.Configuration
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.HasKey(c => c.Id);
-            builder.HasData(new Category()
-            {
-                CategoryName = "Elektronik",
-                CreatedDate = DateTime.Now,
-                Status = false
-            });
+           
         }
     }
 }

@@ -5,10 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DemoMvcProject.DataAccess.Concrete.EntityFramework
 {
-    public class EfCategoryDal : EfEntityRepositoryBase<Category>, ICategoryDal
+    public class EfCategoryDal : EfEntityRepositoryBase<Category, AppDbContext>, ICategoryDal
     {
-        public EfCategoryDal(DbContext context) : base(context)
-        {
-        }
+        
     }
 }
