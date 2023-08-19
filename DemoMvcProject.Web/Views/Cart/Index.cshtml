@@ -1,0 +1,46 @@
+﻿@model CartViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Fiyatı</th>
+            <th>Adet</th>
+            <th>Ara Toplam</th>
+            <th>Toplam</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.Price</td>
+                <td>@item.Quantity</td>
+                <td>@item.Subtotal.ToString("C")</td>
+                <td></td>
+                <td>
+                    <a class="btn btn-danger" asp-action="Delete" asp-controller="Cart">Delete</a>
+                    <a class="btn btn-success" asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductId">Artı</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4"></td>
+            <td>@Model.Total.ToString("C")</td>
+            <td>
+                <a class="btn btn-primary" asp-action="PlaceOrder" asp-controller="Cart">Siparişi Tamamla</a>
+            </td>
+        </tr>
+        
+    </tfoot>
+</table>

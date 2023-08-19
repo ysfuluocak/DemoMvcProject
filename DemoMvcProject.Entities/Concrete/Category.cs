@@ -6,8 +6,9 @@ namespace DemoMvcProject.Entities.Concrete
     {
         public Category()
         {
-            Status = false;
             CreatedDate = DateTime.Now;
+            Products = new HashSet<Product>();
+            Status = true;
         }
         public string CategoryName { get; set; }
         public ICollection<Product> Products { get; set; }

@@ -1,0 +1,11 @@
+﻿@model ProductViewModel
+
+<h1>Details</h1>
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.ProductName</h5>
+        <p class="card-text">@Model.Description</p>     
+    </div>
+    <a asp-action="Index" asp-controller="Product" class="btn btn-primary">Products</a>
+</div>

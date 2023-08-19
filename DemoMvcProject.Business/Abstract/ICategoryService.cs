@@ -11,6 +11,8 @@ namespace DemoMvcProject.Business.Abstract
     {
         IEnumerable<Category> GetAll();
         Category GetById(int id);
+        IEnumerable<Category> GetAllPublished();
+        Category GetPublished(int id);
         void Add(Category category);
         void Update(Category category);
         void Delete(Category category);

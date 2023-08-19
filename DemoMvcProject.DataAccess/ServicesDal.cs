@@ -17,6 +17,8 @@ namespace DemoMvcProject.DataAccess
         {
             services.AddScoped<IProductDal, EfProductDal>();
             services.AddScoped<ICategoryDal, EfCategoryDal>();
+            services.AddScoped<ICartItemDal, EfCartItemDal>();
+            services.AddScoped<ICartDal, EfCartDal>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DemoMvcProject.Business.Abstract;
 using DemoMvcProject.Entities.Concrete;
+using DemoMvcProject.Web.Models.CategoryViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoMvcProject.Web.Controllers
@@ -15,8 +16,7 @@ namespace DemoMvcProject.Web.Controllers
 
         public IActionResult Index()
         {
-            var categories = _categoryService.GetAll();
-            return View(categories);
+            return View();
         }
 
         public IActionResult Add()
@@ -25,9 +25,43 @@ namespace DemoMvcProject.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Category category)
+        public IActionResult Add(CreateCategoryViewModel model)
         {
+            var category = new Category()
+            {
+                CategoryName = model.CategoryName
+            };
             _categoryService.Add(category);
+            return RedirectToAction("Index");
+        }
+
+
+        public IActionResult Update(int id)
+        {
+            var category = _categoryService.GetPublished(id);
+            var categoryvm = new UpdateCategoryViewModel()
+            {
+                Id = category.Id,
+                CategoryName = category.CategoryName
+            };
+            return View(categoryvm);
+        }
+
+        [HttpPost]
+        public IActionResult Update(UpdateCategoryViewModel model)
+        {
+            var category = new Category()
+            {
+                CategoryName = model.CategoryName
+            };
+            _categoryService.Update(category);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var category = _categoryService.GetById(id);
+            _categoryService.Delete(category);
             return RedirectToAction("Index");
         }
     }

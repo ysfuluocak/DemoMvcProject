@@ -66,5 +66,6 @@ namespace DemoMvcProject.Core.DataAccess.Concrete.EntityFramework
 
             }
         }
+        
     }
 }

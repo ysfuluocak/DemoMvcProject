@@ -19,6 +19,8 @@ namespace DemoMvcProject.Business
             services.AddScopedDal();
             services.AddScoped<IProductService, ProductManager>();
             services.AddScoped<ICategoryService, CategoryManager>();
+            services.AddScoped<ICartItemService,CartItemManager>();
+            services.AddScoped<ICartService, CartManager>();
 
         }
     }

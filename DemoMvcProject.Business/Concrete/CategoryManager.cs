@@ -20,7 +20,8 @@ namespace DemoMvcProject.Business.Concrete
 
         public void Delete(Category category)
         {
-            _categoryDal.Delete(category);
+            category.Status = false;
+            _categoryDal.Update(category);
         }
 
         public IEnumerable<Category> GetAll()
@@ -28,9 +29,19 @@ namespace DemoMvcProject.Business.Concrete
             return _categoryDal.GetAll();
         }
 
+        public IEnumerable<Category> GetAllPublished()
+        {
+            return _categoryDal.GetAll().Where(x => x.Status);
+        }
+
         public Category GetById(int id)
         {
             return _categoryDal.Get(c => c.Id == id);
+        }
+
+        public Category GetPublished(int id)
+        {
+            return _categoryDal.Get(c => c.Id == id && c.Status);
         }
 
         public void Update(Category category)
