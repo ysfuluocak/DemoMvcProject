@@ -1,6 +1,6 @@
 ﻿using DemoMvcProject.Core.DataAccess.Abstract;
 using DemoMvcProject.Entities.Concrete;
-using DemoMvcProject.Entities.Dtos.ProductDto;
+using DemoMvcProject.Entities.Dtos.ProductDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

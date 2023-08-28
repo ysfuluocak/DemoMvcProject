@@ -1,13 +1,8 @@
 ﻿using DemoMvcProject.Core.DataAccess.Abstract;
 using DemoMvcProject.Core.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DemoMvcProject.Core.DataAccess.Concrete.EntityFramework
 {
@@ -16,14 +11,14 @@ namespace DemoMvcProject.Core.DataAccess.Concrete.EntityFramework
         where TContext : DbContext, new()
     {
 
-        public void Add(TEntity entity)
+        public int Add(TEntity entity)
         {
             using (var context = new TContext())
             {
                 var addedEntity = context.Entry(entity);
                 addedEntity.State = EntityState.Added;
                 context.SaveChanges();
-
+                return entity.Id;
             }
         }
 

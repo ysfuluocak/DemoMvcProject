@@ -1,8 +1,4 @@
 using DemoMvcProject.Business;
-using DemoMvcProject.Business.Abstract;
-using DemoMvcProject.Business.Concrete;
-using DemoMvcProject.DataAccess.Abstract;
-using DemoMvcProject.DataAccess.Concrete.EntityFramework;
 
 var builder = WebApplication.CreateBuilder(args);
 

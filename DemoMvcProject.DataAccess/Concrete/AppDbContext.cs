@@ -21,6 +21,7 @@ namespace DemoMvcProject.DataAccess.Concrete
             modelBuilder.ApplyConfiguration(new CategoryConfig());
             modelBuilder.ApplyConfiguration(new CartConfig());
             modelBuilder.ApplyConfiguration(new CartItemConfig());
+            modelBuilder.ApplyConfiguration(new ProductPhotoConfig());
         }
     }
 }

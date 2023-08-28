@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using DemoMvcProject.Entities.Concrete;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DemoMvcProject.Web.Models.ProductViewModels
 {
@@ -10,5 +11,6 @@ namespace DemoMvcProject.Web.Models.ProductViewModels
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public string CategoryName { get; set; }
+        public List<ProductPhoto> Photos { get; set; }
     }
 }

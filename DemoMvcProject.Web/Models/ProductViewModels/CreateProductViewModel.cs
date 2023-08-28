@@ -8,6 +8,7 @@ namespace DemoMvcProject.Web.Models.ProductViewModels
         public string Description { get; set; }
         public decimal Price { get; set; }
         public int Stock { get; set; }
+        public string ImagePath { get; set; }
         public int CategoryId { get; set; }
         public SelectList Categories { get; set; }
     }

@@ -125,10 +125,6 @@ namespace DemoMvcProject.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -147,6 +143,34 @@ namespace DemoMvcProject.DataAccess.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("DemoMvcProject.Entities.Concrete.ProductPhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductPhoto");
                 });
 
             modelBuilder.Entity("DemoMvcProject.Entities.Concrete.CartItem", b =>
@@ -171,6 +195,17 @@ namespace DemoMvcProject.DataAccess.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("DemoMvcProject.Entities.Concrete.ProductPhoto", b =>
+                {
+                    b.HasOne("DemoMvcProject.Entities.Concrete.Product", "Product")
+                        .WithMany("Photos")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("DemoMvcProject.Entities.Concrete.Cart", b =>
                 {
                     b.Navigation("CartItems");
@@ -179,6 +214,11 @@ namespace DemoMvcProject.DataAccess.Migrations
             modelBuilder.Entity("DemoMvcProject.Entities.Concrete.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("DemoMvcProject.Entities.Concrete.Product", b =>
+                {
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

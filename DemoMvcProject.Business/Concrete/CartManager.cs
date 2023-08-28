@@ -45,12 +45,12 @@ namespace DemoMvcProject.Business.Concrete
             {
                 var newCartItem = new CartItem()
                 {
-                    Price = product.Price,
+                    Price = product.Data.Price,
                     ProductId = ProductId,
-                    ProductName = product.ProductName,
+                    ProductName = product.Data.ProductName,
                     Quantity = 1,
                     Status = true,
-                    Subtotal = product.Price,
+                    Subtotal = product.Data.Price,
                     CartId = cart.Id
                 };
 

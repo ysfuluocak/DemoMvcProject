@@ -1,22 +1,19 @@
-﻿using DemoMvcProject.Entities.Concrete;
-using DemoMvcProject.Entities.Dtos.ProductDto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DemoMvcProject.Core.Utilities.Results;
+using DemoMvcProject.Entities.Concrete;
+using DemoMvcProject.Entities.Dtos.ProductDtos;
+using Microsoft.AspNetCore.Http;
 
 namespace DemoMvcProject.Business.Abstract
 {
     public interface IProductService
     {
-        IEnumerable<Product> GetAll();
-        IEnumerable<ProductDetailsDto> GetAllProductDetails();
-        ProductDetailsDto GetProductDetails(int id);
-        Product GetById(int id);
-        void Add(Product product);
-        void Update(Product product);
-        void Delete(Product product);
-        void UpdateProductStock(int productId, int quantityChange);
+        IDataResult<IEnumerable<Product>> GetAll();
+        IDataResult<Product> GetById(int id);
+        IDataResult<IEnumerable<ProductDetailsDto>> GetAllProductDetails();
+        IDataResult<ProductDetailsDto> GetProductDetails(int id);
+        Core.Utilities.Results.IResult Add(CreateProductDto product, IFormFile file);
+        Core.Utilities.Results.IResult Update(UpdateProductDto product);
+        Core.Utilities.Results.IResult Delete(Product product);
+        Core.Utilities.Results.IResult UpdateProductStock(int productId, int quantityChange);
     }
 }

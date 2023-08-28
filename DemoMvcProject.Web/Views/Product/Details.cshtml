@@ -2,10 +2,23 @@
 
 <h1>Details</h1>
 
-<div class="card" style="width: 18rem;">
-    <div class="card-body">
-        <h5 class="card-title">@Model.ProductName</h5>
-        <p class="card-text">@Model.Description</p>     
-    </div>
-    <a asp-action="Index" asp-controller="Product" class="btn btn-primary">Products</a>
+<a asp-action="CreatePhoto" asp-controller="Product" class="btn btn-outline-success" asp-route-id="@Model.Id">Create Photo</a>
+<div class="row">
+    @foreach (var item in Model.Photos)
+    {
+
+        <div class="col-md-4">
+            <img src="~/images/@item.ImagePath" alt="@Model.ProductName" class="img-thumbnail" />
+            <a asp-action="UpdatePhoto" role="button" asp-controller="Product" class="btn btn-warning mt-3" asp-route-id="@item.Id">Update Photo</a>
+            <a asp-action="DeletePhoto" role="button" asp-controller="Product" class="btn btn-danger mt-3" asp-route-id="@item.Id">Delete Photo</a>
+        </div>
+    }
 </div>
+<div class="row">
+    <div class="col-md-4">
+        <a asp-action="Index" asp-controller="Product" class="btn btn-primary">Products</a>
+    </div>
+</div>
+
+
+

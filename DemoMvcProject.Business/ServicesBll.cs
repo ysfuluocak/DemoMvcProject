@@ -1,14 +1,11 @@
 ﻿using DemoMvcProject.Business.Abstract;
 using DemoMvcProject.Business.Concrete;
+using DemoMvcProject.Business.Validation.FluentValidation;
 using DemoMvcProject.DataAccess;
-using DemoMvcProject.DataAccess.Abstract;
-using DemoMvcProject.DataAccess.Concrete.EntityFramework;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DemoMvcProject.Business
 {
@@ -21,6 +18,10 @@ namespace DemoMvcProject.Business
             services.AddScoped<ICategoryService, CategoryManager>();
             services.AddScoped<ICartItemService,CartItemManager>();
             services.AddScoped<ICartService, CartManager>();
+            services.AddScoped<IProductPhotoService, ProductPhotoManager>();
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<ProductValidator>();
+
 
         }
     }

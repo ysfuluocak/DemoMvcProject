@@ -1,13 +1,7 @@
 ﻿using DemoMvcProject.DataAccess.Abstract;
-using DemoMvcProject.DataAccess.Concrete;
 using DemoMvcProject.DataAccess.Concrete.EntityFramework;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DemoMvcProject.DataAccess
 {
@@ -19,6 +13,7 @@ namespace DemoMvcProject.DataAccess
             services.AddScoped<ICategoryDal, EfCategoryDal>();
             services.AddScoped<ICartItemDal, EfCartItemDal>();
             services.AddScoped<ICartDal, EfCartDal>();
+            services.AddScoped<IProductPhotoDal, EfProductPhoto>();
         }
     }
 }

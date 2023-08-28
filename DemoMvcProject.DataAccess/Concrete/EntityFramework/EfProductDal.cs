@@ -1,13 +1,9 @@
 ﻿using DemoMvcProject.Core.DataAccess.Concrete.EntityFramework;
 using DemoMvcProject.DataAccess.Abstract;
 using DemoMvcProject.Entities.Concrete;
-using DemoMvcProject.Entities.Dtos.ProductDto;
+using DemoMvcProject.Entities.Dtos.ProductDtos;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DemoMvcProject.DataAccess.Concrete.EntityFramework
 {
@@ -36,6 +32,10 @@ namespace DemoMvcProject.DataAccess.Concrete.EntityFramework
             using (var context = new AppDbContext())
             {
                 var product = context.Set<Product>().Include(c => c.Category).SingleOrDefault(p => p.Id == id && p.Status);
+                if(product is null)
+                {
+                    throw new Exception("Ürün bulunamadı!");
+                }
                 return new ProductDetailsDto()
                 {
                     Id = product.Id,
