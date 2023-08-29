@@ -39,6 +39,7 @@ namespace DemoMvcProject.Web.Controllers
         public IActionResult AddToCart(int id)
         {
             _cartService.AddToCart(id);
+            TempData["AddToCart"] = "İşlem başarılı";
             return RedirectToAction("Index");
 
         }

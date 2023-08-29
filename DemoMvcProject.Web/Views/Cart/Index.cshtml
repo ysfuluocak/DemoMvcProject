@@ -41,6 +41,16 @@
                 <a class="btn btn-primary" asp-action="PlaceOrder" asp-controller="Cart">Siparişi Tamamla</a>
             </td>
         </tr>
-        
+
     </tfoot>
 </table>
+
+@section Scripts{
+    @if (TempData["AddToCart"] != null)
+    {
+        <script>
+            toastr.success("Ürün sepete eklendi!", "Başarılı");
+        </script>
+    }
+
+                    }
