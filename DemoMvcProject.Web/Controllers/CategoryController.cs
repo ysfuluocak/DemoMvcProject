@@ -38,7 +38,7 @@ namespace DemoMvcProject.Web.Controllers
 
         public IActionResult Update(int id)
         {
-            var category = _categoryService.GetPublished(id);
+            var category = _categoryService.GetPublished(id).Data;
             var categoryvm = new UpdateCategoryViewModel()
             {
                 Id = category.Id,
@@ -60,7 +60,7 @@ namespace DemoMvcProject.Web.Controllers
 
         public IActionResult Delete(int id)
         {
-            var category = _categoryService.GetById(id);
+            var category = _categoryService.GetById(id).Data;
             _categoryService.Delete(category);
             return RedirectToAction("Index");
         }

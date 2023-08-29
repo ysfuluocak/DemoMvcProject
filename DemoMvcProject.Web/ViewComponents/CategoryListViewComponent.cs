@@ -16,7 +16,7 @@ namespace DemoMvcProject.Web.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var categoriesvm = new List<CategoryViewModel>();
-            var categories = _categoryService.GetAllPublished();
+            var categories = _categoryService.GetAllPublished().Data;
             foreach (var category in categories)
             {
                 categoriesvm.Add(new CategoryViewModel()

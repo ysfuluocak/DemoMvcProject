@@ -5,6 +5,10 @@
 
 <h1>Index</h1>
 
+<div>
+    <span class="text-danger">@TempData["OrderError"]</span>
+</div>
+
 <table class="table">
 
     <thead>
@@ -27,8 +31,8 @@
                 <td>@item.Subtotal.ToString("C")</td>
                 <td></td>
                 <td>
-                    <a class="btn btn-danger" asp-action="Delete" asp-controller="Cart">Delete</a>
-                    <a class="btn btn-success" asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductId">Artı</a>
+                    <a class="btn btn-danger" asp-action="DeleteItem" asp-controller="Cart" asp-route-id="@item.ProductId"><i class="fa-solid fa-minus"></i></a>
+                    <a class="btn btn-success" asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductId"><i class="fa-solid fa-plus"></i></a>
                 </td>
             </tr>
         }
@@ -45,12 +49,6 @@
     </tfoot>
 </table>
 
-@section Scripts{
-    @if (TempData["AddToCart"] != null)
-    {
-        <script>
-            toastr.success("Ürün sepete eklendi!", "Başarılı");
-        </script>
-    }
 
-                    }
+
+                 

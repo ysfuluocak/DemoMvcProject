@@ -2,6 +2,7 @@
 using DemoMvcProject.Entities.Concrete;
 using DemoMvcProject.Entities.Dtos.ProductDtos;
 using Microsoft.AspNetCore.Http;
+using IResult = DemoMvcProject.Core.Utilities.Results.IResult;
 
 namespace DemoMvcProject.Business.Abstract
 {
@@ -11,9 +12,9 @@ namespace DemoMvcProject.Business.Abstract
         IDataResult<Product> GetById(int id);
         IDataResult<IEnumerable<ProductDetailsDto>> GetAllProductDetails();
         IDataResult<ProductDetailsDto> GetProductDetails(int id);
-        Core.Utilities.Results.IResult Add(CreateProductDto product, IFormFile file);
-        Core.Utilities.Results.IResult Update(UpdateProductDto product);
-        Core.Utilities.Results.IResult Delete(Product product);
-        Core.Utilities.Results.IResult UpdateProductStock(int productId, int quantityChange);
+        IResult Add(CreateProductDto product, IFormFile file);
+        IResult Update(UpdateProductDto product);
+        IResult Delete(Product product);
+        IResult UpdateProductStock(int productId, int quantityChange);
     }
 }

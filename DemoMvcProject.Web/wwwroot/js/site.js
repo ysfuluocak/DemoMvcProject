@@ -14,3 +14,4 @@
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut"
 }
+

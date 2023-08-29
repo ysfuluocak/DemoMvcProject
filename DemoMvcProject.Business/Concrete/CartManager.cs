@@ -1,12 +1,10 @@
 ﻿using DemoMvcProject.Business.Abstract;
+using DemoMvcProject.Business.Constants;
+using DemoMvcProject.Core.Utilities.Business;
+using DemoMvcProject.Core.Utilities.Results;
 using DemoMvcProject.DataAccess.Abstract;
 using DemoMvcProject.Entities.Concrete;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DemoMvcProject.Business.Concrete
 {
@@ -23,23 +21,24 @@ namespace DemoMvcProject.Business.Concrete
             _cartItemService = cartItemService;
         }
 
-        public Cart Add(Cart cart)
+        public IDataResult<Cart> Add(Cart cart)
         {
             cart.Status = true;
             _cartDal.Add(cart);
-            return cart;
+            return new SuccessDataResult<Cart>(cart,Messages.CartAdded);
         }
 
-        public void AddToCart(int ProductId)
+        public IResult AddToCart(int ProductId)
         {
             var product = _productService.GetProductDetails(ProductId);
-            var cart = GetActiveCart() ?? Add(new Cart());
+            var cart = GetActiveCart().Data ?? Add(new Cart()).Data;
             var existingItem = cart.CartItems.FirstOrDefault(p => p.ProductId == ProductId);
             if (existingItem is not null)
             {
                 existingItem.Quantity += 1;
                 existingItem.Subtotal = existingItem.Quantity * existingItem.Price;
                 _cartItemService.Update(existingItem);
+                return new SuccessResult(Messages.CartItemAddedForCart);
             }
             else
             {
@@ -53,56 +52,96 @@ namespace DemoMvcProject.Business.Concrete
                     Subtotal = product.Data.Price,
                     CartId = cart.Id
                 };
-
-                cart.CartItems.Add(newCartItem);
                 _cartItemService.Add(newCartItem);
+                return new SuccessResult(Messages.CartItemAddedForCart);
             }
 
         }
 
-        public void Delete(Cart cart)
+        public IResult Delete(Cart cart)
         {
             cart.Status = false;
             _cartDal.Update(cart);
+            return new SuccessResult(Messages.CartDeleted);
         }
 
-        public Cart GetActiveCart()
+        public IResult DeleteToCart(int ProductId)
         {
-            return _cartDal.GetActiveCart();
+            var cart = GetActiveCart();
+            var existingItem = cart.Data.CartItems.FirstOrDefault(p => p.ProductId == ProductId);
+            if (existingItem is null)
+            {
+                return new ErrorResult(Messages.ProductNotFound);
+            }
+            if (existingItem.Quantity > 1)
+            {
+                existingItem.Quantity -= 1;
+                existingItem.Subtotal = existingItem.Quantity * existingItem.Price;
+                _cartItemService.Update(existingItem);
+                return new SuccessResult(Messages.CartItemDeletedForCart);
+            }
+            else
+            {
+                existingItem.Quantity = 0;
+                existingItem.Subtotal = 0;
+                _cartItemService.Delete(existingItem);
+                return new SuccessResult(Messages.CartItemDeletedForCart);
+            }
         }
 
-        public IEnumerable<Cart> GetAll()
+        public IDataResult<Cart> GetActiveCart()
         {
-            return _cartDal.GetAll();
+            return new SuccessDataResult<Cart>(_cartDal.GetActiveCart(),Messages.ActiveCartsListed);
         }
 
-        public Cart GetById(int id)
+        public IDataResult<IEnumerable<Cart>> GetAll()
         {
-            return _cartDal.Get(c => c.Id == id);
+            return new SuccessDataResult<IEnumerable<Cart>>(_cartDal.GetAll(),Messages.CartsListed);
         }
 
-        public void PlaceOrder()
+        public IDataResult<Cart> GetById(int id)
         {
-            var activeCart = GetActiveCart();
+            return new SuccessDataResult<Cart>(_cartDal.Get(c => c.Id == id),Messages.CartShown);
+        }
+
+        public IResult PlaceOrder()
+        {
+            var activeCart = GetActiveCart().Data;
+            var result = BusinessRules.Run(IsStockAvailableForOrder(activeCart.CartItems));
+            if(result != null)
+            {
+                return new ErrorResult(Messages.OutOfStock);
+            }
             activeCart.Status = false;
             activeCart.TotalPrice = activeCart.CartItems.Sum(ci => ci.Subtotal);
-            activeCart.CartItems.ToList().ForEach(ci => ci.Status = false);
             Update(activeCart);
 
-            foreach(var item in activeCart.CartItems)
+            foreach (var item in activeCart.CartItems)
             {
-                item.Status =false;
+                item.Status = false;
                 _cartItemService.Update(item);
                 _productService.UpdateProductStock(item.ProductId, item.Quantity);
             }
-
+            return new SuccessResult(Messages.OrderCompleted);
         }
 
-        public void Update(Cart cart)
+        public IResult Update(Cart cart)
         {
             _cartDal.Update(cart);
+            return new SuccessResult(Messages.CartUpdated);
         }
 
-        
+        private IResult IsStockAvailableForOrder(ICollection<CartItem> items)
+        {
+            foreach (var item in items)
+            {
+                var product = _productService.GetById(item.ProductId);
+                if (product.Data == null || product.Data.Stock < item.Quantity)
+                {
+                    return new ErrorResult(Messages.OutOfStock);
+                }
+            }
+            return new SuccessResult();
+        }
     }
 }

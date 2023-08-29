@@ -28,7 +28,7 @@ namespace DemoMvcProject.Web.Controllers
 
         public IActionResult Add()
         {
-            var categories = _categoryService.GetAll();
+            var categories = _categoryService.GetAll().Data;
             ViewBag.Categories = new SelectList(categories, "Id", "CategoryName");
             return View();
         }
@@ -38,7 +38,7 @@ namespace DemoMvcProject.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var categories = _categoryService.GetAll();
+                var categories = _categoryService.GetAll().Data;
                 ViewBag.Categories = new SelectList(categories, "Id", "CategoryName");
                 return View(model);
             }
@@ -50,25 +50,20 @@ namespace DemoMvcProject.Web.Controllers
         public IActionResult Update(int id)
         {
 
-            var product = _productService.GetProductDetails(id);
-            var categories = _categoryService.GetAll();
-            if (product.Success)
+            var product = _productService.GetProductDetails(id).Data;
+            var categories = _categoryService.GetAll().Data;
+            ViewBag.Categories = new SelectList(categories, "Id", "CategoryName", product.CategoryId);
+            var updateProduct = new UpdateProductDto()
             {
-                ViewBag.Categories = new SelectList(categories, "Id", "CategoryName", product.Data.CategoryId);
-                var updateProduct = new UpdateProductDto()
-                {
-                    ProductId = product.Data.Id,
-                    ProductName = product.Data.ProductName,
-                    Description = product.Data.Description,
-                    Price = product.Data.Price,
-                    Stock = product.Data.Stock,
-                    CategoryId = product.Data.CategoryId
-                };
-                return View(updateProduct);
-            }
-            TempData["Error"] = product.Message;
-            return View(); //buraya bakacagım
-           
+                ProductId = product.Id,
+                ProductName = product.ProductName,
+                Description = product.Description,
+                Price = product.Price,
+                Stock = product.Stock,
+                CategoryId = product.CategoryId
+            };
+            return View(updateProduct);
+
         }
 
         [HttpPost]
@@ -90,7 +85,7 @@ namespace DemoMvcProject.Web.Controllers
                 try
                 {
                     var product = _productService.GetProductDetails(id);
-                    var photos = _productPhotoService.GetProductPhotosByProductIdPublished(id).ToList();
+                    var photos = _productPhotoService.GetProductPhotosByProductIdPublished(id).Data.ToList();
                     var productvm = new ProductViewModel()
                     {
                         Id = product.Data.Id,
@@ -150,7 +145,7 @@ namespace DemoMvcProject.Web.Controllers
 
         public IActionResult UpdatePhoto(int id) //productPhotoId
         {
-            var productPhoto = _productPhotoService.GetProductPhotoByProductIdPublished(id);
+            var productPhoto = _productPhotoService.GetProductPhotoByProductIdPublished(id).Data;
             var updatedProductPhoto = new UpdateProductPhotoDto()
             {
                 ImagePath = productPhoto.ImagePath,
@@ -176,7 +171,7 @@ namespace DemoMvcProject.Web.Controllers
         public IActionResult DeletePhoto(int id) //photoId
         {
 
-            int productId = _productPhotoService.Delete(id);
+            int productId = _productPhotoService.Delete(id).Data;
             return RedirectToAction("Details", new { id = productId });
         }
 

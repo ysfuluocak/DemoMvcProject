@@ -1,11 +1,21 @@
 using DemoMvcProject.Business;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScopedBll();
-
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(opt =>
+    {
+        opt.Cookie.Name = "DemoMvcProject.Auth";
+        opt.ExpireTimeSpan = TimeSpan.FromDays(1);
+        opt.SlidingExpiration = false;
+        opt.LoginPath = "/Auth/Login";
+        opt.LogoutPath = "/Auth/Logout";
+        opt.AccessDeniedPath = "/Home/AccessDenied";
+    });
 
 var app = builder.Build();
 
@@ -21,7 +31,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

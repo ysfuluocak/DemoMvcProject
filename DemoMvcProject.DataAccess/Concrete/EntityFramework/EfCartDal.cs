@@ -2,11 +2,7 @@
 using DemoMvcProject.DataAccess.Abstract;
 using DemoMvcProject.Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DemoMvcProject.DataAccess.Concrete.EntityFramework
 {
@@ -14,9 +10,17 @@ namespace DemoMvcProject.DataAccess.Concrete.EntityFramework
     {
         public Cart GetActiveCart()
         {
-            using(var context = new AppDbContext())
+            using (var context = new AppDbContext())
             {
-                var cart = context.Set<Cart>().Include(c => c.CartItems).SingleOrDefault(c => c.Status);
+                var cart = context.Set<Cart>()
+                    .Include(c => c.CartItems)
+                    .SingleOrDefault(c => c.Status);
+
+                if (cart != null)
+                {
+                    cart.CartItems = cart.CartItems.Where(ci => ci.Status).ToList();
+                }
+
                 return cart;
             }
         }

@@ -5,6 +5,14 @@
     {
       "library": "toastr.js@2.1.4",
       "destination": "wwwroot/toastr.js/"
+    },
+    {
+      "library": "fontawesome-iconpicker@3.2.0",
+      "destination": "wwwroot/fontawesome-iconpicker/"
+    },
+    {
+      "library": "font-awesome@6.4.2",
+      "destination": "wwwroot/font-awesome/"
     }
   ]
 }

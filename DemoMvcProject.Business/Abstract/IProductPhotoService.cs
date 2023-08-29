@@ -1,17 +1,19 @@
-﻿using DemoMvcProject.Entities.Concrete;
+﻿using DemoMvcProject.Core.Utilities.Results;
+using DemoMvcProject.Entities.Concrete;
 using DemoMvcProject.Entities.Dtos.ProductPhotoDtos;
 using Microsoft.AspNetCore.Http;
+using IResult = DemoMvcProject.Core.Utilities.Results.IResult;
 
 namespace DemoMvcProject.Business.Abstract
 {
     public interface IProductPhotoService
     {
-        IEnumerable<ProductPhoto> GetProductPhotosByProductId(int productId);
-        ProductPhoto GetProductPhotoByPhotoId(int photoId);
-        IEnumerable<ProductPhoto> GetProductPhotosByProductIdPublished(int productId);
-        ProductPhoto GetProductPhotoByProductIdPublished(int photoId);
-        void Add(ProductPhoto photo,IFormFile file);
-        void Update(UpdateProductPhotoDto photo,IFormFile file);
-        int Delete(int photoId);
+        IDataResult<IEnumerable<ProductPhoto>> GetProductPhotosByProductId(int productId);
+        IDataResult<ProductPhoto> GetProductPhotoByPhotoId(int photoId);
+        IDataResult<IEnumerable<ProductPhoto>> GetProductPhotosByProductIdPublished(int productId);
+        IDataResult<ProductPhoto> GetProductPhotoByProductIdPublished(int photoId);
+        IResult Add(ProductPhoto photo, IFormFile file);
+        IResult Update(UpdateProductPhotoDto photo, IFormFile file);
+        IDataResult<int> Delete(int photoId);
     }
 }

@@ -1,22 +1,20 @@
-﻿using DemoMvcProject.Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DemoMvcProject.Core.Utilities.Results;
+using DemoMvcProject.Entities.Concrete;
+using IResult = DemoMvcProject.Core.Utilities.Results.IResult;
 
 namespace DemoMvcProject.Business.Abstract
 {
     public interface ICartService
     {
-        IEnumerable<Cart> GetAll();
-        Cart GetById(int id);
-        Cart GetActiveCart();
-        Cart Add(Cart cart);
-        void Update(Cart cart);
-        void Delete(Cart cart);
-        void AddToCart(int ProductId);
-        void PlaceOrder();
+       IDataResult<IEnumerable<Cart>> GetAll();
+       IDataResult<Cart> GetById(int id);
+        IDataResult<Cart> GetActiveCart();
+        IDataResult<Cart> Add(Cart cart);
+        IResult Update(Cart cart);
+        IResult Delete(Cart cart);
+        IResult AddToCart(int ProductId);
+        IResult PlaceOrder();
+        IResult DeleteToCart(int ProductId);
 
     }
 }

@@ -13,7 +13,7 @@ namespace DemoMvcProject.Web.Controllers
         }
         public IActionResult Index()
         {
-            var cart = _cartService.GetActiveCart();
+            var cart = _cartService.GetActiveCart().Data;
             var cartViewModel = new CartViewModel();
 
             if (cart is not null) //cart != null
@@ -39,7 +39,6 @@ namespace DemoMvcProject.Web.Controllers
         public IActionResult AddToCart(int id)
         {
             _cartService.AddToCart(id);
-            TempData["AddToCart"] = "İşlem başarılı";
             return RedirectToAction("Index");
 
         }
@@ -47,8 +46,19 @@ namespace DemoMvcProject.Web.Controllers
 
         public IActionResult PlaceOrder()
         {
-            _cartService.PlaceOrder();
-            return RedirectToAction("Index", "Home");
+           var result = _cartService.PlaceOrder();
+            if (result.Success)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            TempData["OrderError"] = result.Message;
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteItem(int id) //produtcId
+        {
+            _cartService.DeleteToCart(id);
+            return RedirectToAction("Index");
         }
     }
 }

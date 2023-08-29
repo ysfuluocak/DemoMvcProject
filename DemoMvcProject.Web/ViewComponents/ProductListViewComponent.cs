@@ -23,7 +23,7 @@ namespace DemoMvcProject.Web.ViewComponents
             var productsvm = new List<ProductViewModel>();
             foreach (var product in products.Data)
             {
-                var photos = _productPhotoService.GetProductPhotosByProductIdPublished(product.Id).ToList();
+                var photos = _productPhotoService.GetProductPhotosByProductIdPublished(product.Id).Data.ToList();
                 productsvm.Add(new ProductViewModel()
                 {
                     ProductName = product.ProductName,

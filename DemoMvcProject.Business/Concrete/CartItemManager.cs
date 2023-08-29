@@ -1,11 +1,9 @@
 ﻿using DemoMvcProject.Business.Abstract;
+using DemoMvcProject.Business.Constants;
+using DemoMvcProject.Core.Utilities.Results;
 using DemoMvcProject.DataAccess.Abstract;
 using DemoMvcProject.Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DemoMvcProject.Business.Concrete
 {
@@ -18,30 +16,33 @@ namespace DemoMvcProject.Business.Concrete
             _cartItemDal = cartItemDal;
         }
 
-        public void Add(CartItem cartItem)
+        public IResult Add(CartItem cartItem)
         {
             _cartItemDal.Add(cartItem);
+            return new SuccessResult(Messages.CartItemAdded);
         }
 
-        public void Delete(CartItem cartItem)
+        public IResult Delete(CartItem cartItem)
         {
             cartItem.Status = false;
             _cartItemDal.Update(cartItem);
+            return new SuccessResult(Messages.CartItemDeleted);
         }
 
-        public IEnumerable<CartItem> GetAll()
+        public IDataResult<IEnumerable<CartItem>> GetAll()
         {
-            return _cartItemDal.GetAll();
+            return new SuccessDataResult<IEnumerable<CartItem>>(_cartItemDal.GetAll(),Messages.CartItemsListed);
         }
 
-        public CartItem GetById(int id)
+        public IDataResult<CartItem> GetById(int id)
         {
-            return _cartItemDal.Get(ci=>ci.Id == id);
+            return new SuccessDataResult<CartItem>(_cartItemDal.Get(ci=>ci.Id == id),Messages.CartItemShown);
         }
 
-        public void Update(CartItem cartItem)
+        public IResult Update(CartItem cartItem)
         {
             _cartItemDal.Update(cartItem);
+            return new SuccessResult(Messages.CartItemUpdated);
         }
     }
 }

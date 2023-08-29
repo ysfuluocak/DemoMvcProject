@@ -5,6 +5,7 @@ using DemoMvcProject.DataAccess.Abstract;
 using DemoMvcProject.Entities.Concrete;
 using DemoMvcProject.Entities.Dtos.ProductDtos;
 using Microsoft.AspNetCore.Http;
+using IResult = DemoMvcProject.Core.Utilities.Results.IResult;
 
 
 namespace DemoMvcProject.Business.Concrete
@@ -20,7 +21,7 @@ namespace DemoMvcProject.Business.Concrete
             _productPhotoService = productPhotoService;
         }
 
-        public Core.Utilities.Results.IResult Add(CreateProductDto product, IFormFile file)
+        public IResult Add(CreateProductDto product, IFormFile file)
         {
             var addedProduct = new Product()
             {
@@ -39,7 +40,7 @@ namespace DemoMvcProject.Business.Concrete
             return new SuccessResult(Messages.ProductAdded);
         }
 
-        public Core.Utilities.Results.IResult Delete(Product product)
+        public IResult Delete(Product product)
         {
             product.Status = false;
             _productDal.Update(product);
@@ -66,7 +67,7 @@ namespace DemoMvcProject.Business.Concrete
             return new SuccessDataResult<ProductDetailsDto>(_productDal.GetProductDetails(id),Messages.ProductShown);
         }
 
-        public Core.Utilities.Results.IResult Update(UpdateProductDto product)
+        public IResult Update(UpdateProductDto product)
         {
             var updatedProduct = GetById(product.ProductId).Data;
             updatedProduct.ProductName = product.ProductName ?? updatedProduct.ProductName;
@@ -77,7 +78,7 @@ namespace DemoMvcProject.Business.Concrete
             _productDal.Update(updatedProduct);
             return new SuccessResult(Messages.ProductUpdated);
         }
-        public Core.Utilities.Results.IResult UpdateProductStock(int productId, int quantityChange)
+        public IResult UpdateProductStock(int productId, int quantityChange)
         {
             var product = GetById(productId).Data;
             var updatedProduct = new UpdateProductDto()
