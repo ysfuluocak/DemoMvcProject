@@ -14,6 +14,10 @@ namespace DemoMvcProject.DataAccess
             services.AddScoped<ICartItemDal, EfCartItemDal>();
             services.AddScoped<ICartDal, EfCartDal>();
             services.AddScoped<IProductPhotoDal, EfProductPhoto>();
+            services.AddScoped<IUserDal, EfUserDal>();
+            services.AddScoped<IOperationClaimDal, EfOperationClaimDal>();
+            services.AddScoped<IUserOperationClaimDal, EfUserOperationClaimDal>();
+            services.AddScoped<ICustomerDal, EfCustomerDal>();
         }
     }
 }

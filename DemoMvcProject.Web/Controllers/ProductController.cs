@@ -3,11 +3,13 @@ using DemoMvcProject.Entities.Concrete;
 using DemoMvcProject.Entities.Dtos.ProductDtos;
 using DemoMvcProject.Entities.Dtos.ProductPhotoDtos;
 using DemoMvcProject.Web.Models.ProductViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DemoMvcProject.Web.Controllers
 {
+    [Authorize(Roles ="Member")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
@@ -26,6 +28,7 @@ namespace DemoMvcProject.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles ="Admin")]
         public IActionResult Add()
         {
             var categories = _categoryService.GetAll().Data;
@@ -46,7 +49,7 @@ namespace DemoMvcProject.Web.Controllers
             return RedirectToAction("Index");
         }
 
-
+        [Authorize(Roles ="Admin")]
         public IActionResult Update(int id)
         {
 
@@ -109,6 +112,7 @@ namespace DemoMvcProject.Web.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var product = _productService.GetById(id).Data;
@@ -119,6 +123,7 @@ namespace DemoMvcProject.Web.Controllers
 
         //ProductPhoto
         #region ProductPhoto
+        [Authorize(Roles = "Admin")]
         public IActionResult CreatePhoto(int id) //productId
         {
             var createPhoto = new CreateProductPhotoDto()
@@ -142,7 +147,7 @@ namespace DemoMvcProject.Web.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         public IActionResult UpdatePhoto(int id) //productPhotoId
         {
             var productPhoto = _productPhotoService.GetProductPhotoByProductIdPublished(id).Data;
@@ -168,6 +173,7 @@ namespace DemoMvcProject.Web.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult DeletePhoto(int id) //photoId
         {
 

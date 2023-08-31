@@ -1,9 +1,5 @@
 ﻿using DemoMvcProject.Core.Entities.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DemoMvcProject.Entities.Concrete
 {
@@ -16,6 +12,9 @@ namespace DemoMvcProject.Entities.Concrete
             Status = false;
         }
         public decimal TotalPrice { get; set; }
+        public int CustomerId { get; set; }
+
+        public Customer Customer { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
     }
 }

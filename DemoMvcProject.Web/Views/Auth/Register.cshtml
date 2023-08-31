@@ -1,0 +1,29 @@
+﻿@model UserForRegisterDto
+
+
+
+
+<div>
+    <span class="text-danger">@TempData["RegisterError"]</span>
+</div>
+
+
+<form asp-action="Register" asp-controller="Auth" method="post">
+    <div class="form-group">
+        <label asp-for="FirstName">FirstName:</label>
+        <input type="text" class="form-control" asp-for="FirstName">
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName">LastName:</label>
+        <input type="text" class="form-control" asp-for="LastName">
+    </div>
+    <div class="form-group">
+        <label asp-for="Email">Email:</label>
+        <input type="email" class="form-control" asp-for="Email">
+    </div>
+    <div class="form-group">
+        <label asp-for="Password">Password:</label>
+        <input type="password" class="form-control" asp-for="Password">
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>

@@ -1,10 +1,12 @@
 ﻿using DemoMvcProject.Business.Abstract;
 using DemoMvcProject.Entities.Concrete;
 using DemoMvcProject.Web.Models.CategoryViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoMvcProject.Web.Controllers
 {
+    [Authorize(Roles ="Admin,Member")]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

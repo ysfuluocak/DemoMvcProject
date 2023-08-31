@@ -19,14 +19,14 @@ namespace DemoMvcProject.Business.Concrete
         public IResult Add(CartItem cartItem)
         {
             _cartItemDal.Add(cartItem);
-            return new SuccessResult(Messages.CartItemAdded);
+            return new SuccessResult(Messages.CartItemAddedForCart);
         }
 
         public IResult Delete(CartItem cartItem)
         {
             cartItem.Status = false;
             _cartItemDal.Update(cartItem);
-            return new SuccessResult(Messages.CartItemDeleted);
+            return new SuccessResult(Messages.CartItemDeletedForCart);
         }
 
         public IDataResult<IEnumerable<CartItem>> GetAll()

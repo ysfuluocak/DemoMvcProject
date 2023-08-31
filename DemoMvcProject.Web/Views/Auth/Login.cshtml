@@ -1,0 +1,19 @@
+﻿@model UserForLoginDto
+
+
+<div>
+    <span class="text-danger">@TempData["LoginError"]</span>
+</div>
+
+
+<form asp-action="Login" asp-controller="Auth" method="post">
+    <div class="form-group">
+        <label asp-for="Email">Email:</label>
+        <input type="email" class="form-control" asp-for="Email">
+    </div>
+    <div class="form-group">
+        <label asp-for="Password">Password:</label>
+        <input type="password" class="form-control" asp-for="Password">
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
