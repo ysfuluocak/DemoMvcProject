@@ -24,4 +24,9 @@
     <ProjectReference Include="..\DemoMvcProject.Business\DemoMvcProject.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Middlewares\" />
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>

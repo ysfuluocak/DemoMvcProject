@@ -1,11 +1,7 @@
 ﻿using DemoMvcProject.Core.Entities.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DemoMvcProject.Entities.Dtos.ProductDto
+
+namespace DemoMvcProject.Entities.Dtos.ProductDtos
 {
     public class ProductDetailsDto : IDto
     {

@@ -1,20 +1,17 @@
-﻿using DemoMvcProject.Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DemoMvcProject.Core.Utilities.Results;
+using DemoMvcProject.Entities.Concrete;
+using IResult = DemoMvcProject.Core.Utilities.Results.IResult;
 
 namespace DemoMvcProject.Business.Abstract
 {
     public interface ICategoryService
     {
-        IEnumerable<Category> GetAll();
-        Category GetById(int id);
-        IEnumerable<Category> GetAllPublished();
-        Category GetPublished(int id);
-        void Add(Category category);
-        void Update(Category category);
-        void Delete(Category category);
+        IDataResult<IEnumerable<Category>> GetAll();
+        IDataResult<Category> GetById(int id);
+        IDataResult<IEnumerable<Category>> GetAllPublished();
+        IDataResult<Category> GetPublished(int id);
+        IResult Add(Category category);
+        IResult Update(Category category);
+        IResult Delete(Category category);
     }
 }

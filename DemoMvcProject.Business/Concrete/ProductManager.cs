@@ -1,67 +1,98 @@
 ﻿using DemoMvcProject.Business.Abstract;
+using DemoMvcProject.Business.Constants;
+using DemoMvcProject.Core.Utilities.Results;
 using DemoMvcProject.DataAccess.Abstract;
 using DemoMvcProject.Entities.Concrete;
-using DemoMvcProject.Entities.Dtos.ProductDto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DemoMvcProject.Entities.Dtos.ProductDtos;
+using Microsoft.AspNetCore.Http;
+using IResult = DemoMvcProject.Core.Utilities.Results.IResult;
+
 
 namespace DemoMvcProject.Business.Concrete
 {
     public class ProductManager : IProductService
     {
         private readonly IProductDal _productDal;
+        private readonly IProductPhotoService _productPhotoService;
 
-        public ProductManager(IProductDal productDal)
+        public ProductManager(IProductDal productDal, IProductPhotoService productPhotoService)
         {
             _productDal = productDal;
+            _productPhotoService = productPhotoService;
         }
 
-        public void Add(Product product)
+        public IResult Add(CreateProductDto product, IFormFile file)
         {
-            _productDal.Add(product);
+            var addedProduct = new Product()
+            {
+                ProductName = product.ProductName,
+                Description = product.Description,
+                CategoryId = product.CategoryId,
+                Price = product.Price,
+                Stock = product.Stock
+            };
+            var productId = _productDal.Add(addedProduct);
+            var photo = new ProductPhoto()
+            {
+                ProductId = productId
+            };       
+            _productPhotoService.Add(photo, file);
+            return new SuccessResult(Messages.ProductAdded);
         }
 
-        public void Delete(Product product)
+        public IResult Delete(Product product)
         {
             product.Status = false;
             _productDal.Update(product);
+            return new SuccessResult(Messages.ProductDeleted);
         }
 
-        public IEnumerable<Product> GetAll()
+        public IDataResult<IEnumerable<Product>> GetAll()
         {
-            return _productDal.GetAll();
+            return new SuccessDataResult<IEnumerable<Product>>(_productDal.GetAll(),Messages.ProductListed);
         }
 
-        public IEnumerable<ProductDetailsDto> GetAllProductDetails()
+        public IDataResult<IEnumerable<ProductDetailsDto>> GetAllProductDetails()
         {
-            return _productDal.GetAllProductDetailsDto();
+            return new SuccessDataResult<IEnumerable<ProductDetailsDto>>(_productDal.GetAllProductDetailsDto(),Messages.ProductListed);
         }
 
-        public Product GetById(int id)
+        public IDataResult<Product> GetById(int id)
         {
-           return _productDal.Get(p=>p.Id == id);
+            return new SuccessDataResult<Product>(_productDal.Get(p => p.Id == id),Messages.ProductShown);
         }
 
-        public ProductDetailsDto GetProductDetails(int id)
+        public IDataResult<ProductDetailsDto> GetProductDetails(int id)
         {
-            return _productDal.GetProductDetails(id);
+            return new SuccessDataResult<ProductDetailsDto>(_productDal.GetProductDetails(id),Messages.ProductShown);
         }
 
-        public void Update(Product product)
+        public IResult Update(UpdateProductDto product)
         {
-            _productDal.Update(product);
+            var updatedProduct = GetById(product.ProductId).Data;
+            updatedProduct.ProductName = product.ProductName ?? updatedProduct.ProductName;
+            updatedProduct.Description = product.Description ?? updatedProduct.Description;
+            updatedProduct.CategoryId = product.CategoryId ?? updatedProduct.CategoryId;
+            updatedProduct.Price = product.Price ?? updatedProduct.Price;
+            updatedProduct.Stock = product.Stock ?? updatedProduct.Stock;
+            _productDal.Update(updatedProduct);
+            return new SuccessResult(Messages.ProductUpdated);
         }
-        public void UpdateProductStock(int productId, int quantityChange)
+        public IResult UpdateProductStock(int productId, int quantityChange)
         {
-            var product = GetById(productId);
+            var product = GetById(productId).Data;
+            var updatedProduct = new UpdateProductDto()
+            {
+                ProductId = productId,
+                Stock = product.Stock
+            };
             if (product != null)
             {
-                product.Stock -= quantityChange;
-                Update(product);
+                updatedProduct.Stock -= quantityChange;
+                Update(updatedProduct);
+                return new SuccessResult(Messages.ProductStockUpdated);
             }
+            return new ErrorResult(Messages.ProductStockNotUpdated);
         }
     }
 

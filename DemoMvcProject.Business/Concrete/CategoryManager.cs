@@ -1,4 +1,6 @@
 ﻿using DemoMvcProject.Business.Abstract;
+using DemoMvcProject.Business.Constants;
+using DemoMvcProject.Core.Utilities.Results;
 using DemoMvcProject.DataAccess.Abstract;
 using DemoMvcProject.Entities.Concrete;
 
@@ -13,40 +15,43 @@ namespace DemoMvcProject.Business.Concrete
             _categoryDal = categoryDal;
         }
 
-        public void Add(Category category)
+        public IResult Add(Category category)
         {
             _categoryDal.Add(category);
+            return new SuccessResult(Messages.CategoryAdded);
         }
 
-        public void Delete(Category category)
+        public IResult Delete(Category category)
         {
             category.Status = false;
             _categoryDal.Update(category);
+            return new SuccessResult(Messages.CategoryDeleted);
         }
 
-        public IEnumerable<Category> GetAll()
+        public IDataResult<IEnumerable<Category>> GetAll()
         {
-            return _categoryDal.GetAll();
+            return new SuccessDataResult<IEnumerable<Category>>(_categoryDal.GetAll(),Messages.CategoryListed);
         }
 
-        public IEnumerable<Category> GetAllPublished()
+        public IDataResult<IEnumerable<Category>> GetAllPublished()
         {
-            return _categoryDal.GetAll().Where(x => x.Status);
+            return new SuccessDataResult<IEnumerable<Category>>(_categoryDal.GetAll().Where(x => x.Status),Messages.PublishCategoryListed);
         }
 
-        public Category GetById(int id)
+        public IDataResult<Category> GetById(int id)
         {
-            return _categoryDal.Get(c => c.Id == id);
+            return new SuccessDataResult<Category>(_categoryDal.Get(c => c.Id == id),Messages.CategoryShown);
         }
 
-        public Category GetPublished(int id)
+        public IDataResult<Category> GetPublished(int id)
         {
-            return _categoryDal.Get(c => c.Id == id && c.Status);
+            return new SuccessDataResult<Category>(_categoryDal.Get(c => c.Id == id && c.Status),Messages.PublishCategoryShown);
         }
 
-        public void Update(Category category)
+        public IResult Update(Category category)
         {
             _categoryDal.Update(category);
+            return new SuccessResult(Messages.CategoryUpdated);
         }
     }
 

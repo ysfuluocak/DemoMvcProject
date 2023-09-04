@@ -1,19 +1,25 @@
 ﻿using DemoMvcProject.Business.Abstract;
 using DemoMvcProject.Web.Models.CartViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace DemoMvcProject.Web.Controllers
 {
+    [Authorize(Roles = "Admin,Member")]
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
-        public CartController(ICartService cartService)
+        private readonly ICustomerService _customerService;
+        public CartController(ICartService cartService, ICustomerService customerService)
         {
             _cartService = cartService;
+            _customerService = customerService;
         }
         public IActionResult Index()
         {
-            var cart = _cartService.GetActiveCart();
+            var customerId = _customerService.GetByUserId(Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))).Data.Id;
+            var cart = _cartService.GetActiveCartByCustomerId(customerId).Data;
             var cartViewModel = new CartViewModel();
 
             if (cart is not null) //cart != null
@@ -36,9 +42,17 @@ namespace DemoMvcProject.Web.Controllers
             return View(cartViewModel);
         }
 
-        public IActionResult AddToCart(int id)
+        
+        public IActionResult AddToCart(int id) //productId
         {
-            _cartService.AddToCart(id);
+            var userIdString = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                TempData["LoginError"] = "Giriş yapınız";
+                return RedirectToAction("Login", "Auth");
+            }
+            var userId = Convert.ToInt32(userIdString);
+            _cartService.AddToCart(userId, id);
             return RedirectToAction("Index");
 
         }
@@ -46,8 +60,21 @@ namespace DemoMvcProject.Web.Controllers
 
         public IActionResult PlaceOrder()
         {
-            _cartService.PlaceOrder();
-            return RedirectToAction("Index", "Home");
+            var customerId = _customerService.GetByUserId(Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))).Data.Id;
+            var result = _cartService.PlaceOrder(customerId);
+            if (result.Success)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            TempData["OrderError"] = result.Message;
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteItem(int id) //produtcId
+        {
+            var customerId = _customerService.GetByUserId(Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))).Data.Id;
+            _cartService.DeleteToCart(customerId, id);
+            return RedirectToAction("Index");
         }
     }
 }
